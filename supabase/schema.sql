@@ -1,6 +1,16 @@
 -- Supabase Schema for Ahsan Fertilizer & Crops Store
 -- Run this SQL in the Supabase SQL Editor to create all tables
 
+-- Shops table
+CREATE TABLE IF NOT EXISTS shops (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_shops_user ON shops(user_id);
+
 -- Products table
 CREATE TABLE IF NOT EXISTS products (
   id BIGSERIAL PRIMARY KEY,
@@ -9,6 +19,7 @@ CREATE TABLE IF NOT EXISTS products (
   unit TEXT NOT NULL DEFAULT 'bags',
   min_stock NUMERIC(10,2) NOT NULL DEFAULT 10,
   user_id TEXT,
+  shop_id BIGINT REFERENCES shops(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -30,6 +41,7 @@ CREATE TABLE IF NOT EXISTS sales (
   due_date DATE,
   notes TEXT DEFAULT '',
   user_id TEXT,
+  shop_id BIGINT REFERENCES shops(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -44,6 +56,7 @@ CREATE TABLE IF NOT EXISTS purchases (
   supplier TEXT DEFAULT '',
   notes TEXT DEFAULT '',
   user_id TEXT,
+  shop_id BIGINT REFERENCES shops(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -59,6 +72,7 @@ CREATE TABLE IF NOT EXISTS crop_purchases (
   notes TEXT DEFAULT '',
   status TEXT NOT NULL DEFAULT 'in_storage' CHECK (status IN ('in_storage', 'sold')),
   user_id TEXT,
+  shop_id BIGINT REFERENCES shops(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -84,13 +98,21 @@ CREATE INDEX IF NOT EXISTS idx_sales_user ON sales(user_id);
 CREATE INDEX IF NOT EXISTS idx_purchases_user ON purchases(user_id);
 CREATE INDEX IF NOT EXISTS idx_crop_purchases_user ON crop_purchases(user_id);
 
+-- Shop-scoped indexes
+CREATE INDEX IF NOT EXISTS idx_products_shop ON products(shop_id);
+CREATE INDEX IF NOT EXISTS idx_sales_shop ON sales(shop_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_shop ON purchases(shop_id);
+CREATE INDEX IF NOT EXISTS idx_crop_purchases_shop ON crop_purchases(shop_id);
+
 -- Enable Row Level Security (RLS)
+ALTER TABLE shops ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sales ENABLE ROW LEVEL SECURITY;
 ALTER TABLE purchases ENABLE ROW LEVEL SECURITY;
 ALTER TABLE crop_purchases ENABLE ROW LEVEL SECURITY;
 
 -- Allow all operations for authenticated and anonymous users (single-user app)
+CREATE POLICY "Allow all on shops" ON shops FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on products" ON products FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on sales" ON sales FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on purchases" ON purchases FOR ALL USING (true) WITH CHECK (true);

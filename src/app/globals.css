@@ -816,6 +816,175 @@ td[colspan] {
   }
 }
 
+/* ── Shop Selector ──────────────────────────────────────── */
+.shop-selector-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shop-selector {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  padding: 7px 32px 7px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.shop-selector:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.shop-selector:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.shop-selector option {
+  background: var(--primary-900);
+  color: white;
+}
+
+.shop-manage-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.shop-manage-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Create First Shop ─────────────────────────────────── */
+.create-first-shop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--slate-100);
+  padding: 16px;
+}
+
+.create-first-shop-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: 48px 40px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+  border: 1px solid var(--slate-200);
+}
+
+.create-first-shop-card h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--primary-800);
+  margin-bottom: 8px;
+}
+
+.create-first-shop-card > p {
+  color: var(--slate-500);
+  margin-bottom: 28px;
+  font-size: 14px;
+}
+
+.create-first-shop-card form {
+  text-align: left;
+}
+
+.create-first-shop-card .btn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* ── Shop Management Modal ─────────────────────────────── */
+.shop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.shop-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  background: var(--slate-50);
+}
+
+.shop-list-name {
+  font-weight: 500;
+  color: var(--slate-700);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.shop-edit-row input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1.5px solid var(--slate-300);
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-family: inherit;
+}
+
+.shop-edit-row input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.shop-add-form {
+  border-top: 1px solid var(--slate-200);
+  padding-top: 16px;
+}
+
+.shop-add-row {
+  display: flex;
+  gap: 8px;
+}
+
+.shop-add-row input {
+  flex: 1;
+}
+
+.shop-add-row .btn {
+  flex-shrink: 0;
+}
+
 /* ── Auth Pages ──────────────────────────────────────────── */
 .auth-page {
   display: flex;

@@ -1,3 +1,10 @@
+export interface Shop {
+  id: number;
+  name: string;
+  user_id: string;
+  created_at?: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -5,6 +12,7 @@ export interface Product {
   unit: string;
   min_stock: number;
   user_id?: string;
+  shop_id?: number;
   created_at?: string;
 }
 
@@ -25,6 +33,7 @@ export interface Sale {
   due_date: string | null;
   notes: string;
   user_id?: string;
+  shop_id?: number;
   created_at?: string;
 }
 
@@ -38,6 +47,7 @@ export interface Purchase {
   supplier: string;
   notes: string;
   user_id?: string;
+  shop_id?: number;
   created_at?: string;
 }
 
@@ -52,6 +62,7 @@ export interface CropPurchase {
   notes: string;
   status: "in_storage" | "sold";
   user_id?: string;
+  shop_id?: number;
   created_at?: string;
 }
 

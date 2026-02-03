@@ -19,6 +19,7 @@ import Products from "@/components/Products";
 import Backup from "@/components/Backup";
 import SalesHistory from "@/components/SalesHistory";
 import PurchaseHistory from "@/components/PurchaseHistory";
+import CreateFirstShop from "@/components/CreateFirstShop";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabName>("dashboard");
@@ -29,16 +30,36 @@ export default function Home() {
     [store.products, store.sales, store.purchases]
   );
 
-  function renderTab() {
-    if (store.loading) {
-      return (
-        <div className="loading-container">
-          <div className="loading-spinner" />
-          <p>Loading data from Supabase...</p>
+  // Show loading state
+  if (store.loading) {
+    return (
+      <div className="container">
+        <Header
+          notificationCount={0}
+          onNotificationClick={() => {}}
+          shops={store.shops}
+          currentShopId={store.currentShopId}
+          onSwitchShop={store.switchShop}
+          onCreateShop={store.createShop}
+          onRenameShop={store.renameShop}
+          onDeleteShop={store.removeShop}
+        />
+        <div className="content">
+          <div className="loading-container">
+            <div className="loading-spinner" />
+            <p>Loading data from Supabase...</p>
+          </div>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
+  // Show create first shop screen when user has no shops
+  if (!store.loading && store.shops.length === 0) {
+    return <CreateFirstShop onCreateShop={store.createShop} />;
+  }
+
+  function renderTab() {
     if (store.error) {
       return (
         <div className="error-container">
@@ -159,6 +180,12 @@ export default function Home() {
       <Header
         notificationCount={notifications.length}
         onNotificationClick={() => setActiveTab("notifications")}
+        shops={store.shops}
+        currentShopId={store.currentShopId}
+        onSwitchShop={store.switchShop}
+        onCreateShop={store.createShop}
+        onRenameShop={store.renameShop}
+        onDeleteShop={store.removeShop}
       />
       <NavTabs activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="content">{renderTab()}</div>
