@@ -12,7 +12,8 @@ export default function Customers({ sales }: CustomersProps) {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Customers</h2>
+      <h2 className="page-title">Customers</h2>
+      <p className="page-subtitle">Customer purchase history and outstanding balances</p>
       <div className="table-container">
         <table>
           <thead>
@@ -28,24 +29,18 @@ export default function Customers({ sales }: CustomersProps) {
           <tbody>
             {customers.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: "center" }}>
-                  No customers yet
-                </td>
+                <td colSpan={6}>No customers yet</td>
               </tr>
             ) : (
               customers.map((customer) => {
                 const loanClass = customer.outstandingLoans > 0 ? "profit-negative" : "profit-positive";
                 return (
                   <tr key={customer.name}>
-                    <td>
-                      <strong>{customer.name}</strong>
-                    </td>
+                    <td><strong>{customer.name}</strong></td>
                     <td>{customer.phone}</td>
                     <td>{customer.address}</td>
                     <td>{formatCurrency(customer.totalPurchases)}</td>
-                    <td className={loanClass}>
-                      <strong>{formatCurrency(customer.outstandingLoans)}</strong>
-                    </td>
+                    <td className={loanClass}><strong>{formatCurrency(customer.outstandingLoans)}</strong></td>
                     <td>{customer.lastPurchase}</td>
                   </tr>
                 );

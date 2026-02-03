@@ -49,7 +49,7 @@ export default function AddPurchase({ products, onAddPurchase, onSuccess }: AddP
 
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Add Purchase</h2>
+      <h2 className="page-title">Add Purchase</h2>
       {alert && <Alert message={alert.message} type={alert.type} onDismiss={() => setAlert(null)} />}
 
       <form onSubmit={handleSubmit}>

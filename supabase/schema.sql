@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS products (
   category TEXT DEFAULT '',
   unit TEXT NOT NULL DEFAULT 'bags',
   min_stock NUMERIC(10,2) NOT NULL DEFAULT 10,
+  user_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS sales (
   remaining_amount NUMERIC(12,2) DEFAULT 0,
   due_date DATE,
   notes TEXT DEFAULT '',
+  user_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -41,6 +43,7 @@ CREATE TABLE IF NOT EXISTS purchases (
   date DATE NOT NULL DEFAULT CURRENT_DATE,
   supplier TEXT DEFAULT '',
   notes TEXT DEFAULT '',
+  user_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -55,6 +58,7 @@ CREATE TABLE IF NOT EXISTS crop_purchases (
   supplier TEXT DEFAULT '',
   notes TEXT DEFAULT '',
   status TEXT NOT NULL DEFAULT 'in_storage' CHECK (status IN ('in_storage', 'sold')),
+  user_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -73,6 +77,12 @@ CREATE INDEX IF NOT EXISTS idx_purchases_product ON purchases(product_id);
 CREATE INDEX IF NOT EXISTS idx_purchases_date ON purchases(date);
 CREATE INDEX IF NOT EXISTS idx_crop_purchases_status ON crop_purchases(status);
 CREATE INDEX IF NOT EXISTS idx_crop_purchases_type ON crop_purchases(crop_type);
+
+-- User-scoped indexes
+CREATE INDEX IF NOT EXISTS idx_products_user ON products(user_id);
+CREATE INDEX IF NOT EXISTS idx_sales_user ON sales(user_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_user ON purchases(user_id);
+CREATE INDEX IF NOT EXISTS idx_crop_purchases_user ON crop_purchases(user_id);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;

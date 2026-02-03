@@ -26,39 +26,39 @@ export default function Reports({ sales }: ReportsProps) {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Reports</h2>
-      <p>Generate detailed sales and profit reports</p>
+      <h2 className="page-title">Reports</h2>
+      <p className="page-subtitle">Generate detailed sales and profit reports</p>
 
-      <div style={{ marginTop: 20 }}>
-        <button className="btn btn-primary" onClick={() => setReportType("daily")}>
-          📅 Daily Report
+      <div className="action-buttons" style={{ marginBottom: 24 }}>
+        <button className={`btn ${reportType === "daily" ? "btn-primary" : "btn-ghost"}`} onClick={() => setReportType("daily")}>
+          Daily Report
         </button>
-        <button className="btn btn-info" onClick={() => setReportType("monthly")}>
-          📊 Monthly Report
+        <button className={`btn ${reportType === "monthly" ? "btn-primary" : "btn-ghost"}`} onClick={() => setReportType("monthly")}>
+          Monthly Report
         </button>
       </div>
 
-      <div style={{ marginTop: 20 }}>
-        {reportType === "daily" && (
-          <div>
-            <h3>Daily Report - {today}</h3>
-            <div className="dashboard-grid" style={{ margin: "15px 0" }}>
-              <StatCard title="Sales" value={formatCurrency(dailyTotal)} gradient="#27ae60" />
-              <StatCard title="Profit" value={formatCurrency(dailyProfit)} gradient="#3498db" />
-            </div>
+      {reportType === "daily" && (
+        <div>
+          <h3 className="section-title">Daily Report — {today}</h3>
+          <div className="dashboard-grid">
+            <StatCard title="Sales" value={formatCurrency(dailyTotal)} gradient="#059669" />
+            <StatCard title="Profit" value={formatCurrency(dailyProfit)} gradient="#2563eb" />
+            <StatCard title="Transactions" value={String(todaySales.length)} gradient="#d97706" />
           </div>
-        )}
+        </div>
+      )}
 
-        {reportType === "monthly" && (
-          <div>
-            <h3>Monthly Report - {thisMonth}</h3>
-            <div className="dashboard-grid" style={{ margin: "15px 0" }}>
-              <StatCard title="Sales" value={formatCurrency(monthlyTotal)} gradient="#9b59b6" />
-              <StatCard title="Profit" value={formatCurrency(monthlyProfit)} gradient="#e67e22" />
-            </div>
+      {reportType === "monthly" && (
+        <div>
+          <h3 className="section-title">Monthly Report — {thisMonth}</h3>
+          <div className="dashboard-grid">
+            <StatCard title="Sales" value={formatCurrency(monthlyTotal)} gradient="#7c3aed" />
+            <StatCard title="Profit" value={formatCurrency(monthlyProfit)} gradient="#0891b2" />
+            <StatCard title="Transactions" value={String(monthlySales.length)} gradient="#d97706" />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

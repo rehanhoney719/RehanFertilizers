@@ -33,54 +33,21 @@ export default function Dashboard({ products, sales, purchases }: DashboardProps
 
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Dashboard Overview</h2>
+      <h2 className="page-title">Dashboard Overview</h2>
+      <p className="page-subtitle">Real-time business metrics at a glance</p>
       <div className="dashboard-grid">
-        <StatCard
-          title="Today's Sales"
-          value={formatCurrency(todaySalesTotal)}
-          gradient="linear-gradient(135deg, #11998e 0%, #38ef7d 100%)"
-        />
-        <StatCard
-          title="Today's Profit"
-          value={formatCurrency(todayProfit)}
-          gradient="linear-gradient(135deg, #eb3349 0%, #f45c43 100%)"
-        />
-        <StatCard
-          title="Pending Loans"
-          value={formatCurrency(totalPending)}
-          gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-        />
-        <StatCard
-          title="Stock Value"
-          value={formatCurrency(totalStockValue)}
-          gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
-        />
+        <StatCard title="Today's Sales" value={formatCurrency(todaySalesTotal)} gradient="#059669" />
+        <StatCard title="Today's Profit" value={formatCurrency(todayProfit)} gradient="#16a34a" />
+        <StatCard title="Pending Loans" value={formatCurrency(totalPending)} gradient="#dc2626" />
+        <StatCard title="Stock Value" value={formatCurrency(totalStockValue)} gradient="#2563eb" />
       </div>
 
-      <h3 style={{ margin: "20px 0 15px", color: "#34495e" }}>Monthly Performance</h3>
+      <h3 className="section-title">Monthly Performance</h3>
       <div className="dashboard-grid">
-        <StatCard
-          title="Monthly Sales"
-          value={formatCurrency(monthlySalesTotal)}
-          gradient="linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
-        />
-        <StatCard
-          title="Monthly Profit"
-          value={formatCurrency(monthlyProfit)}
-          gradient="linear-gradient(135deg, #30cfd0 0%, #330867 100%)"
-        />
-        <StatCard
-          title="Products"
-          value={String(products.length)}
-          gradient="linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
-          darkText
-        />
-        <StatCard
-          title="Transactions"
-          value={String(sales.length + purchases.length)}
-          gradient="linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
-          darkText
-        />
+        <StatCard title="Monthly Sales" value={formatCurrency(monthlySalesTotal)} gradient="#7c3aed" />
+        <StatCard title="Monthly Profit" value={formatCurrency(monthlyProfit)} gradient="#0891b2" />
+        <StatCard title="Products" value={String(products.length)} gradient="#d97706" />
+        <StatCard title="Transactions" value={String(sales.length + purchases.length)} gradient="#64748b" />
       </div>
     </div>
   );

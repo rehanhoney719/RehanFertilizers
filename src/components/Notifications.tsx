@@ -9,18 +9,17 @@ interface NotificationsProps {
 export default function Notifications({ notifications }: NotificationsProps) {
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Notifications & Alerts</h2>
+      <h2 className="page-title">Notifications & Alerts</h2>
+      <p className="page-subtitle">Low stock warnings and overdue loan reminders</p>
 
       {notifications.length === 0 ? (
         <div className="alert alert-success">
-          <strong>✅ All good!</strong> No alerts at this time.
+          <strong>All good!</strong> No alerts at this time.
         </div>
       ) : (
         notifications.map((notif, index) => (
           <div key={index} className={`alert alert-${notif.type}`}>
-            <strong>
-              {notif.icon} {notif.title}
-            </strong>
+            <strong>{notif.icon} {notif.title}</strong>
             <br />
             {notif.message}
           </div>

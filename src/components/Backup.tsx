@@ -75,7 +75,7 @@ export default function Backup({ products, sales, purchases, cropPurchases, onRe
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(stockData), "Stock");
 
       XLSX.writeFile(wb, `Ahsan_Store_${new Date().toISOString().split("T")[0]}.xlsx`);
-      window.alert("✓ Exported to Excel!");
+      window.alert("Exported to Excel!");
     } catch (error) {
       console.error("Excel export error:", error);
       window.alert("Error exporting Excel");
@@ -135,7 +135,7 @@ export default function Backup({ products, sales, purchases, cropPurchases, onRe
       });
 
       doc.save(`Ahsan_Store_Report_${new Date().toISOString().split("T")[0]}.pdf`);
-      window.alert("✓ PDF generated!");
+      window.alert("PDF generated!");
     } catch (error) {
       console.error("PDF error:", error);
       window.alert("Error generating PDF");
@@ -156,7 +156,7 @@ export default function Backup({ products, sales, purchases, cropPurchases, onRe
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    window.alert("✓ Backup downloaded!");
+    window.alert("Backup downloaded!");
   }
 
   function handleRestore(event: React.ChangeEvent<HTMLInputElement>) {
@@ -177,7 +177,7 @@ export default function Backup({ products, sales, purchases, cropPurchases, onRe
           return;
         }
         window.alert(
-          "✓ Backup file validated! To restore data into Supabase, use the Supabase dashboard import or contact your admin."
+          "Backup file validated! To restore data into Supabase, use the Supabase dashboard import or contact your admin."
         );
       } catch {
         window.alert("Error reading backup file");
@@ -189,34 +189,33 @@ export default function Backup({ products, sales, purchases, cropPurchases, onRe
 
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Backup & Export</h2>
+      <h2 className="page-title">Backup & Export</h2>
+      <p className="page-subtitle">Export your data or create backups</p>
 
-      <div className="dashboard-grid" style={{ marginBottom: 20 }}>
-        <StatCard title="Transactions" value={String(totalTrans)} gradient="#3498db" />
-        <StatCard title="Data Source" value="Supabase" gradient="#2ecc71" />
+      <div className="dashboard-grid">
+        <StatCard title="Transactions" value={String(totalTrans)} gradient="#2563eb" />
+        <StatCard title="Data Source" value="Supabase" gradient="#059669" />
       </div>
 
-      <h3 style={{ margin: "15px 0 10px", color: "#34495e" }}>Export Data</h3>
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-        <button className="btn btn-success" onClick={exportToExcel} disabled={exporting}>
-          📊 Export Excel
-        </button>
-        <button className="btn btn-info" onClick={exportToPDF} disabled={exporting}>
-          📄 Export PDF
-        </button>
-        <button className="btn btn-primary" onClick={downloadBackup}>
-          💾 Download Backup
-        </button>
+      <div className="section-card">
+        <h3 className="section-title" style={{ marginTop: 0 }}>Export Data</h3>
+        <div className="action-buttons">
+          <button className="btn btn-success" onClick={exportToExcel} disabled={exporting}>Export Excel</button>
+          <button className="btn btn-info" onClick={exportToPDF} disabled={exporting}>Export PDF</button>
+          <button className="btn btn-primary" onClick={downloadBackup}>Download Backup</button>
+        </div>
       </div>
 
-      <h3 style={{ margin: "25px 0 10px", color: "#34495e" }}>Restore</h3>
-      <input type="file" ref={fileInputRef} accept=".json" onChange={handleRestore} />
-      <p style={{ marginTop: 5, color: "#7f8c8d", fontSize: 13 }}>Upload backup file to validate data</p>
+      <div className="section-card">
+        <h3 className="section-title" style={{ marginTop: 0 }}>Restore</h3>
+        <input type="file" ref={fileInputRef} accept=".json" onChange={handleRestore} />
+        <p className="page-subtitle" style={{ marginTop: 8, marginBottom: 0, fontSize: 13 }}>Upload backup file to validate data</p>
+      </div>
 
-      <h3 style={{ margin: "25px 0 10px", color: "#34495e" }}>Refresh Data</h3>
-      <button className="btn btn-warning" onClick={onReload}>
-        🔄 Reload from Supabase
-      </button>
+      <div className="section-card">
+        <h3 className="section-title" style={{ marginTop: 0 }}>Refresh Data</h3>
+        <button className="btn btn-warning" onClick={onReload}>Reload from Supabase</button>
+      </div>
     </div>
   );
 }

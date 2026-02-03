@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Product, Sale, Purchase } from "@/types";
 import { calculateProductStock } from "@/lib/calculations";
 import Alert from "./ui/Alert";
+import EditModal, { EditField } from "./ui/EditModal";
 
 interface ProductsProps {
   products: Product[];
@@ -11,7 +12,26 @@ interface ProductsProps {
   purchases: Purchase[];
   onAddProduct: (product: Omit<Product, "id" | "created_at">) => Promise<Product>;
   onDeleteProduct: (id: number) => Promise<void>;
+  onEditProduct: (id: number, updates: Partial<Omit<Product, "id" | "created_at">>) => Promise<Product>;
 }
+
+const editFields: EditField[] = [
+  { key: "name", label: "Name", type: "text", required: true },
+  { key: "category", label: "Category", type: "text" },
+  {
+    key: "unit",
+    label: "Unit",
+    type: "select",
+    required: true,
+    options: [
+      { value: "bags", label: "Bags" },
+      { value: "kg", label: "Kilograms" },
+      { value: "ton", label: "Tons" },
+      { value: "liters", label: "Liters" },
+    ],
+  },
+  { key: "min_stock", label: "Min Stock Level", type: "number", required: true, step: "0.01", min: "0" },
+];
 
 export default function Products({
   products,
@@ -19,6 +39,7 @@ export default function Products({
   purchases,
   onAddProduct,
   onDeleteProduct,
+  onEditProduct,
 }: ProductsProps) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -26,6 +47,7 @@ export default function Products({
   const [minStock, setMinStock] = useState("10");
   const [alert, setAlert] = useState<{ message: string; type: "success" | "danger" } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,7 +66,7 @@ export default function Products({
         unit,
         min_stock: parseFloat(minStock),
       });
-      setAlert({ message: "✓ Product added!", type: "success" });
+      setAlert({ message: "Product added successfully!", type: "success" });
       setName("");
       setCategory("");
       setUnit("bags");
@@ -71,56 +93,58 @@ export default function Products({
     }
   }
 
+  async function handleEditSave(values: Record<string, string | number>) {
+    if (!editingProduct) return;
+    await onEditProduct(editingProduct.id, {
+      name: String(values.name).trim(),
+      category: String(values.category).trim(),
+      unit: String(values.unit),
+      min_stock: parseFloat(String(values.min_stock)),
+    });
+    setAlert({ message: "Product updated successfully!", type: "success" });
+  }
+
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Manage Products</h2>
+      <h2 className="page-title">Manage Products</h2>
+      <p className="page-subtitle">Add, edit, and manage your product catalog</p>
       {alert && <Alert message={alert.message} type={alert.type} onDismiss={() => setAlert(null)} />}
 
-      <h3 style={{ marginBottom: 10, color: "#34495e" }}>Add Product</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label>Name *</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+      <div className="section-card">
+        <h3 className="section-title" style={{ marginTop: 0 }}>Add Product</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Name *</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div className="form-group">
+              <label>Category</label>
+              <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Urea, DAP, etc." />
+            </div>
+            <div className="form-group">
+              <label>Unit *</label>
+              <select value={unit} onChange={(e) => setUnit(e.target.value)} required>
+                <option value="bags">Bags</option>
+                <option value="kg">Kilograms</option>
+                <option value="ton">Tons</option>
+                <option value="liters">Liters</option>
+              </select>
+            </div>
           </div>
-          <div className="form-group">
-            <label>Category</label>
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="Urea, DAP, etc."
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Min Stock Level *</label>
+              <input type="number" step="0.01" min="0" value={minStock} onChange={(e) => setMinStock(e.target.value)} required />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Unit *</label>
-            <select value={unit} onChange={(e) => setUnit(e.target.value)} required>
-              <option value="bags">Bags</option>
-              <option value="kg">Kilograms</option>
-              <option value="ton">Tons</option>
-              <option value="liters">Liters</option>
-            </select>
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group">
-            <label>Min Stock Level *</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={minStock}
-              onChange={(e) => setMinStock(e.target.value)}
-              required
-            />
-          </div>
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
-          {submitting ? "Adding..." : "➕ Add Product"}
-        </button>
-      </form>
+          <button type="submit" className="btn btn-primary" disabled={submitting}>
+            {submitting ? "Adding..." : "Add Product"}
+          </button>
+        </form>
+      </div>
 
-      <h3 style={{ margin: "25px 0 15px", color: "#34495e" }}>All Products</h3>
+      <h3 className="section-title">All Products</h3>
       <div className="table-container">
         <table>
           <thead>
@@ -130,38 +154,30 @@ export default function Products({
               <th>Unit</th>
               <th>Stock</th>
               <th>Min Level</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => {
               const stock = calculateProductStock(product.id, purchases, sales);
-              const stockStatus =
-                stock.stockLeft < Number(product.min_stock) ? (
-                  <span style={{ color: "#e74c3c" }}>⚠️ Low</span>
-                ) : (
-                  <span style={{ color: "#27ae60" }}>✓ OK</span>
-                );
-
+              const isLow = stock.stockLeft < Number(product.min_stock);
               return (
                 <tr key={product.id}>
-                  <td>
-                    <strong>{product.name}</strong>
-                  </td>
+                  <td><strong>{product.name}</strong></td>
                   <td>{product.category || "-"}</td>
                   <td>{product.unit}</td>
                   <td>
-                    {stock.stockLeft.toFixed(2)} {stockStatus}
+                    {stock.stockLeft.toFixed(2)}{" "}
+                    <span className={`badge ${isLow ? "badge-loan" : "badge-cash"}`}>
+                      {isLow ? "Low" : "OK"}
+                    </span>
                   </td>
                   <td>{product.min_stock}</td>
                   <td>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(product.id)}
-                      style={{ padding: "6px 12px", fontSize: 13 }}
-                    >
-                      Delete
-                    </button>
+                    <div className="action-buttons">
+                      <button className="btn btn-info btn-sm" onClick={() => setEditingProduct(product)}>Edit</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(product.id)}>Delete</button>
+                    </div>
                   </td>
                 </tr>
               );
@@ -169,6 +185,15 @@ export default function Products({
           </tbody>
         </table>
       </div>
+
+      <EditModal
+        open={editingProduct !== null}
+        title="Edit Product"
+        fields={editFields}
+        initialValues={editingProduct ? { name: editingProduct.name, category: editingProduct.category, unit: editingProduct.unit, min_stock: editingProduct.min_stock } : {}}
+        onSave={handleEditSave}
+        onClose={() => setEditingProduct(null)}
+      />
     </div>
   );
 }

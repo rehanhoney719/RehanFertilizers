@@ -4,6 +4,7 @@ export interface Product {
   category: string;
   unit: string;
   min_stock: number;
+  user_id?: string;
   created_at?: string;
 }
 
@@ -23,6 +24,7 @@ export interface Sale {
   remaining_amount: number;
   due_date: string | null;
   notes: string;
+  user_id?: string;
   created_at?: string;
 }
 
@@ -35,6 +37,7 @@ export interface Purchase {
   date: string;
   supplier: string;
   notes: string;
+  user_id?: string;
   created_at?: string;
 }
 
@@ -48,6 +51,7 @@ export interface CropPurchase {
   supplier: string;
   notes: string;
   status: "in_storage" | "sold";
+  user_id?: string;
   created_at?: string;
 }
 

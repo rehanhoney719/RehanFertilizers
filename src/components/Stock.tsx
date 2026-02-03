@@ -12,7 +12,7 @@ interface StockProps {
 export default function Stock({ products, sales, purchases }: StockProps) {
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Current Stock</h2>
+      <h2 className="page-title">Current Stock</h2>
       <div className="table-container">
         <table>
           <thead>

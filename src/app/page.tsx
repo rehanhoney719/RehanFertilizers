@@ -17,6 +17,8 @@ import Notifications from "@/components/Notifications";
 import Reports from "@/components/Reports";
 import Products from "@/components/Products";
 import Backup from "@/components/Backup";
+import SalesHistory from "@/components/SalesHistory";
+import PurchaseHistory from "@/components/PurchaseHistory";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabName>("dashboard");
@@ -61,27 +63,47 @@ export default function Home() {
         );
       case "add-sale":
         return (
-          <AddSale
-            products={store.products}
-            sales={store.sales}
-            purchases={store.purchases}
-            onAddSale={store.addSale}
-            onSuccess={() => setActiveTab("dashboard")}
-          />
+          <>
+            <AddSale
+              products={store.products}
+              sales={store.sales}
+              purchases={store.purchases}
+              onAddSale={store.addSale}
+              onSuccess={() => setActiveTab("dashboard")}
+            />
+            <SalesHistory
+              products={store.products}
+              sales={store.sales}
+              purchases={store.purchases}
+              onEditSale={store.editSale}
+              onDeleteSale={store.removeSale}
+            />
+          </>
         );
       case "add-purchase":
         return (
-          <AddPurchase
-            products={store.products}
-            onAddPurchase={store.addPurchase}
-            onSuccess={() => setActiveTab("dashboard")}
-          />
+          <>
+            <AddPurchase
+              products={store.products}
+              onAddPurchase={store.addPurchase}
+              onSuccess={() => setActiveTab("dashboard")}
+            />
+            <PurchaseHistory
+              products={store.products}
+              purchases={store.purchases}
+              sales={store.sales}
+              onEditPurchase={store.editPurchase}
+              onDeletePurchase={store.removePurchase}
+            />
+          </>
         );
       case "crops":
         return (
           <Crops
             cropPurchases={store.cropPurchases}
             onAddCropPurchase={store.addCropPurchase}
+            onEditCropPurchase={store.editCropPurchase}
+            onDeleteCropPurchase={store.removeCropPurchase}
           />
         );
       case "stock":
@@ -93,7 +115,13 @@ export default function Home() {
           />
         );
       case "loans":
-        return <Loans sales={store.sales} products={store.products} />;
+        return (
+          <Loans
+            sales={store.sales}
+            products={store.products}
+            onEditSale={store.editSale}
+          />
+        );
       case "customers":
         return <Customers sales={store.sales} />;
       case "notifications":
@@ -108,6 +136,7 @@ export default function Home() {
             purchases={store.purchases}
             onAddProduct={store.addProduct}
             onDeleteProduct={store.removeProduct}
+            onEditProduct={store.editProduct}
           />
         );
       case "backup":

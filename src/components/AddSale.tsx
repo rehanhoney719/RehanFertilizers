@@ -96,7 +96,7 @@ export default function AddSale({ products, sales, purchases, onAddSale, onSucce
 
   return (
     <div>
-      <h2 style={{ marginBottom: 15, color: "#34495e" }}>Add New Sale</h2>
+      <h2 className="page-title">Add New Sale</h2>
       {alert && <Alert message={alert.message} type={alert.type} onDismiss={() => setAlert(null)} />}
 
       <form onSubmit={handleSubmit}>
@@ -160,7 +160,7 @@ export default function AddSale({ products, sales, purchases, onAddSale, onSucce
           </div>
         </div>
 
-        <h3 style={{ margin: "15px 0 10px", color: "#34495e" }}>Customer Details</h3>
+        <h3 className="section-title">Customer Details</h3>
         <div className="form-row">
           <div className="form-group">
             <label>Customer Name</label>
@@ -176,7 +176,7 @@ export default function AddSale({ products, sales, purchases, onAddSale, onSucce
           </div>
         </div>
 
-        <h3 style={{ margin: "15px 0 10px", color: "#34495e" }}>Payment</h3>
+        <h3 className="section-title">Payment</h3>
         <div className="toggle-switch">
           <span>Cash</span>
           <label className="switch">
@@ -214,7 +214,7 @@ export default function AddSale({ products, sales, purchases, onAddSale, onSucce
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
         </div>
 
-        <div style={{ background: "#f8f9fa", padding: 10, borderRadius: 5, margin: "10px 0" }}>
+        <div className="info-bar">
           <strong>Expected Profit: </strong>
           <span className={expectedProfit >= 0 ? "profit-positive" : "profit-negative"}>
             {formatCurrency(expectedProfit)}
